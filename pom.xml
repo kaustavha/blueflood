@@ -355,4 +355,16 @@
         <email>george.jahad@rackspace.com</email>
     </developer>
   </developers>
+
+  <distributionManagement>
+    <repository>
+      <id>archiva.internal</id>
+      <url>http://izrik-maven-repo:8080/repository/internal/</url>
+    </repository>
+    <snapshotRepository>
+      <id>archiva.snapshots</id>
+      <url>http://izrik-maven-repo:8080/repository/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>
