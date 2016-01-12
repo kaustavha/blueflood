@@ -83,7 +83,7 @@ end
 
 pom_version = pom_evaluate("project.version")
 if not pom_version.end_with?("-SNAPSHOT")
-  puts "The project's effective version doesn't end with \"-SNAPSHOT\""
+  puts "The project's effective version (#{pom_version}) doesn't end with \"-SNAPSHOT\""
   exit 1
 end
 
