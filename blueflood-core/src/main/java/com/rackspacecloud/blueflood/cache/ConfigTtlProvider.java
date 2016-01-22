@@ -33,7 +33,6 @@ public class ConfigTtlProvider implements TenantTtlProvider {
     private final ImmutableTable<Granularity, RollupType, TimeValue> ttlMapper;
     private final TimeValue stringTTL;
     private static final ConfigTtlProvider INSTANCE = createInstance();
-    private static final boolean ARE_TTLS_FORCED = Configuration.getInstance().getBooleanProperty(TtlConfig.ARE_TTLS_FORCED);
     private static final TimeValue TTL_CONFIG_FOR_INGESTION = new TimeValue(Configuration.getInstance().getIntegerProperty(TtlConfig.TTL_CONFIG_CONST), TimeUnit.DAYS);
     private final Configuration configuration;
 
@@ -176,6 +175,6 @@ public class ConfigTtlProvider implements TenantTtlProvider {
     }
 
     public boolean areTTLsForced() {
-        return ARE_TTLS_FORCED;
+        return configuration.getBooleanProperty(TtlConfig.ARE_TTLS_FORCED);
     }
 }
