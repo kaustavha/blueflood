@@ -32,16 +32,38 @@ public class ConfigTtlProvider implements TenantTtlProvider {
 
     private final ImmutableTable<Granularity, RollupType, TimeValue> ttlMapper;
     private final TimeValue stringTTL;
-    private static final ConfigTtlProvider INSTANCE = new ConfigTtlProvider();
+    private static final ConfigTtlProvider INSTANCE = createInstance();
     private static final boolean ARE_TTLS_FORCED = Configuration.getInstance().getBooleanProperty(TtlConfig.ARE_TTLS_FORCED);
     private static final TimeValue TTL_CONFIG_FOR_INGESTION = new TimeValue(Configuration.getInstance().getIntegerProperty(TtlConfig.TTL_CONFIG_CONST), TimeUnit.DAYS);
 
+    /**
+     * Get the default instance of ConfigTtlProvider
+     * @return the default instance
+     */
     public static ConfigTtlProvider getInstance() {
         return INSTANCE;
     }
 
-    private ConfigTtlProvider() {
-        final Configuration config = Configuration.getInstance();
+    /**
+     * Factory method to create an instance of ConfigTtlProvider from the
+     * default Configuration
+     */
+    public static ConfigTtlProvider createInstance() {
+        return createInstance(null);
+    }
+    /**
+     * Factory method to create an instance of ConfigTtlProvider from a
+     * specified Configuration object
+     * @param config a Configuration object to use as the source of settings.
+     *               If null, the default Configuration object will be used.
+     */
+    public static ConfigTtlProvider createInstance(Configuration config) {
+        if (config == null)
+            config = Configuration.getInstance();
+        return new ConfigTtlProvider(config);
+    }
+
+    private ConfigTtlProvider(final Configuration config) {
 
         // String rollups
         stringTTL = new TimeValue(config.getIntegerProperty(TtlConfig.STRING_METRICS_TTL), TimeUnit.DAYS);
