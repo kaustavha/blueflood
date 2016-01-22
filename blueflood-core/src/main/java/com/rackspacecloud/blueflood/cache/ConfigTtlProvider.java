@@ -35,6 +35,7 @@ public class ConfigTtlProvider implements TenantTtlProvider {
     private static final ConfigTtlProvider INSTANCE = createInstance();
     private static final boolean ARE_TTLS_FORCED = Configuration.getInstance().getBooleanProperty(TtlConfig.ARE_TTLS_FORCED);
     private static final TimeValue TTL_CONFIG_FOR_INGESTION = new TimeValue(Configuration.getInstance().getIntegerProperty(TtlConfig.TTL_CONFIG_CONST), TimeUnit.DAYS);
+    private final Configuration configuration;
 
     /**
      * Get the default instance of ConfigTtlProvider
@@ -64,6 +65,8 @@ public class ConfigTtlProvider implements TenantTtlProvider {
     }
 
     private ConfigTtlProvider(final Configuration config) {
+
+        this.configuration = config;
 
         // String rollups
         stringTTL = new TimeValue(config.getIntegerProperty(TtlConfig.STRING_METRICS_TTL), TimeUnit.DAYS);
