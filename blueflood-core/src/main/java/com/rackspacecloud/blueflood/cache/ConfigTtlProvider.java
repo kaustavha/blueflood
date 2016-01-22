@@ -33,7 +33,7 @@ public class ConfigTtlProvider implements TenantTtlProvider {
     private final ImmutableTable<Granularity, RollupType, TimeValue> ttlMapper;
     private final TimeValue stringTTL;
     private static final ConfigTtlProvider INSTANCE = createInstance();
-    private static final TimeValue TTL_CONFIG_FOR_INGESTION = new TimeValue(Configuration.getInstance().getIntegerProperty(TtlConfig.TTL_CONFIG_CONST), TimeUnit.DAYS);
+    private TimeValue configTTLForIngestion = null;
     private final Configuration configuration;
 
     /**
@@ -171,7 +171,20 @@ public class ConfigTtlProvider implements TenantTtlProvider {
 
     @Override
     public TimeValue getConfigTTLForIngestion() {
-        return TTL_CONFIG_FOR_INGESTION;
+
+        // if we already have a configTTLForIngestion object, and the config
+        // for number of days hasn't changed, just re-use the object, in case
+        // any callers are expecting object identity. If the number of days
+        // changes in the config, then go ahead and create a new object.
+
+        int numDays = configuration.getIntegerProperty(TtlConfig.TTL_CONFIG_CONST);
+        if (configTTLForIngestion == null ||
+                configTTLForIngestion.getValue() != numDays) {
+
+            configTTLForIngestion = new TimeValue(numDays, TimeUnit.DAYS);
+        }
+
+        return configTTLForIngestion;
     }
 
     public boolean areTTLsForced() {
